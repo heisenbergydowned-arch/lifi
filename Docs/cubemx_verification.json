@@ -1,0 +1,66 @@
+{
+  "userBlocksUnchanged": false,
+  "customFileHashesUnchanged": true,
+  "targetSourcesIncludesUnchanged": true,
+  "mxCallsUnchanged": true,
+  "mxCalls": [
+    "MX_GPIO_Init",
+    "MX_DMA_Init",
+    "MX_USART1_UART_Init",
+    "MX_ADC1_Init",
+    "MX_TIM3_Init"
+  ],
+  "userBlockCount": 17,
+  "customFileCount": 15,
+  "customGroups": [
+    {
+      "name": "Hardware",
+      "files": [
+        {
+          "name": "USART1.c",
+          "path": "..\\Hardware\\USART1.c"
+        },
+        {
+          "name": "USART1.h",
+          "path": "..\\Hardware\\USART1.h"
+        },
+        {
+          "name": "LdrAdc.c",
+          "path": "../Hardware/LdrAdc.c"
+        },
+        {
+          "name": "LdrAdc.h",
+          "path": "../Hardware/LdrAdc.h"
+        }
+      ]
+    },
+    {
+      "name": "Software",
+      "files": [
+        {
+          "name": "LdrReceiver.c",
+          "path": "../Software/LdrReceiver.c"
+        },
+        {
+          "name": "LdrReceiver.h",
+          "path": "../Software/LdrReceiver.h"
+        },
+        {
+          "name": "LdrReceiver_Config.h",
+          "path": "../Software/LdrReceiver_Config.h"
+        },
+        {
+          "name": "MorseDecoder.c",
+          "path": "../Software/MorseDecoder.c"
+        },
+        {
+          "name": "MorseDecoder.h",
+          "path": "../Software/MorseDecoder.h"
+        }
+      ]
+    }
+  ],
+  "includes": "../Core/Inc;C:/Users/Heisen/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.7/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;C:/Users/Heisen/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.7/Drivers/STM32F1xx_HAL_Driver/Inc;C:/Users/Heisen/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.7/Drivers/CMSIS/Device/ST/STM32F1xx/Include;C:/Users/Heisen/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.7/Drivers/CMSIS/Include;../Hardware;../Software",
+  "userBlockContentsUnchangedIgnoringLineEndings": true,
+  "lineEndingNote": "CubeMX normalized LF to CRLF in Includes, 1, 2 and 3; all USER CODE content preserved."
+}

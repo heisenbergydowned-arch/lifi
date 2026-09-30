@@ -1,0 +1,29 @@
+问题根因
+========
+原工程在 Keil Target 选项中同时启用了 IROM1 和 IROM2。
+链接器因此把程序拆成两段：
+  IROM1: 0x08000000
+  IROM2: 0x08100000
+其中 Reset_Handler 位于 IROM1，但它调用的 ExitRun0Mode 和 SystemInit 被链接到了 IROM2。
+当前 Flash Download 配置没有正确覆盖 0x08100000 段，所以复位后会在启动阶段跳向未下载的代码，随后进入异常或停留在启动文件。
+
+本修正版
+========
+1. 关闭 IROM2，仅使用 IROM1：0x08000000，大小 0x00080000。
+2. 保留原来的 IRAM2（0x24000000）配置。
+3. 删除旧的 AXF、HEX、MAP 等构建产物，必须重新 Build。
+4. 保留 MicroLIB 和 USART1 printf 重定向。原来的 printf -> fputc -> HAL_UART_Transmit 链路是有效的。
+
+使用步骤
+========
+1. 打开 MDK-ARM/Template.uvprojx。
+2. 执行 Project -> Rebuild all target files。
+3. 打开 Options for Target -> Target，确认 IROM1 已勾选、IROM2 未勾选。
+4. 下载并进入调试，程序应能运行到 main()。
+5. 串口输出端口为 USART1 TX = PA9，115200，8N1；USB-TTL 必须共地。
+
+仍无串口输出时检查
+==================
+1. 板载外部晶振必须与工程一致：当前工程按 25 MHz HSE 配置。
+2. 确认实际串口工具连接的是 PA9，而不是其他板载虚拟串口引脚。
+3. 在 main() 中 MX_USART1_UART_Init() 后先调用 USART1_SendString("test\r\n")，再测试 printf。

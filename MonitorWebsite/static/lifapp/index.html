@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#25332d">
+<title>LiFi 发送</title>
+<link rel="stylesheet" href="/app/static/lifapp.css">
+</head>
+<body>
+<header class="app-header">
+  <h1>LiFi 发送</h1>
+  <p>可见光摩斯电码 · 闪光灯发射</p>
+</header>
+<main class="app-main">
+  <section class="card" id="protocol-card">
+    <div class="card-head">
+      <h2>协议状态</h2>
+      <span class="badge" id="protocol-state">未同步</span>
+    </div>
+    <p class="hint" id="protocol-params">正在读取服务器协议…</p>
+    <p class="token-line">一致性令牌 <code id="protocol-token">—</code></p>
+    <button class="muted" type="button" id="refresh-btn">重新同步</button>
+  </section>
+  <section class="card">
+    <h2>摩斯发射</h2>
+    <label class="field-label" for="msg-input">发送内容</label>
+    <input id="msg-input" type="text" maxlength="240" autocomplete="off" autocapitalize="characters"
+           placeholder="A–Z、0–9 与 = . , ? / -">
+    <p class="error" id="msg-error" hidden></p>
+    <pre class="preview" id="msg-preview" hidden></pre>
+    <div class="slider-row">
+      <label for="brightness" id="brightness-label">闪光亮度</label>
+      <input id="brightness" type="range" min="25" max="100" value="100">
+    </div>
+    <p class="hint" id="timing-hint">点击发送后保持闪光灯正对探测器；点时长与划长随当前协议实时生成。</p>
+    <p class="hint" id="device-mode">输出设备：检测中…</p>
+    <div class="btn-row">
+      <button class="primary wide" type="button" id="transmit-btn">发送</button>
+      <button class="muted" type="button" id="stop-btn" hidden>停止</button>
+    </div>
+    <p class="hint" id="tx-status" hidden></p>
+  </section>
+  <section class="card">
+    <h2>协议参数</h2>
+    <p class="hint">四元组与网关、解码器必须一致；保存后本地重算令牌并与服务器返回值比对。</p>
+    <div class="grid">
+      <label class="field"><span>点时长 t_ms</span><input id="set-t" type="number" inputmode="numeric" min="60" max="2000" step="1"><em>60–2000</em></label>
+      <label class="field"><span>划倍数 dash_t</span><input id="set-d" type="number" inputmode="numeric" min="2" max="5" step="1"><em>2–5</em></label>
+      <label class="field"><span>字间距 word_gap_t</span><input id="set-wg" type="number" inputmode="numeric" min="2" max="8" step="1"><em>2–8</em></label>
+      <label class="field"><span>消息间距 msg_gap_t</span><input id="set-mg" type="number" inputmode="numeric" min="4" max="20" step="1"><em>4–20</em></label>
+    </div>
+    <p class="error" id="set-error" hidden></p>
+    <p class="success" id="set-success" hidden></p>
+    <div class="btn-row">
+      <button class="primary" type="button" id="save-btn">保存参数</button>
+      <button class="muted" type="button" id="standard-btn">一键标准格式</button>
+    </div>
+    <p class="hint">标准格式 = ITU 摩斯标准比例：点 100ms · 划 3·T · 字隙 7·T · 消息隙 10·T（点击即写入服务器并比对令牌）。发送多词句子要求 word_gap_t ≥ 3 且 msg_gap_t &gt; word_gap_t；保存后 STM32/网关端须同步为相同四元组。</p>
+  </section>
+  <footer class="app-foot">时序契约与 MorseDecoder 对齐：内隙 1T · 字母间隙 2.5T · 词间隙 (word_gap_t+msg_gap_t)/2·T · 消息结束 msg_gap_t·T 暗段</footer>
+</main>
+<div id="flash-overlay" aria-hidden="true"></div>
+<script src="/app/static/lifapp.js"></script>
+</body>
+</html>

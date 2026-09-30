@@ -1,0 +1,108 @@
+{
+  "health": {
+    "ok": true,
+    "version": "1.0.0"
+  },
+  "unauthenticated_dashboard": 401,
+  "ingest": {
+    "first": 200,
+    "retry": 200,
+    "conflict": 409,
+    "ack_verified": true
+  },
+  "test": {
+    "ok": true,
+    "event_id": "test-initial-test-20260910-one-email",
+    "duplicate": true,
+    "status": "queued"
+  },
+  "dashboard": {
+    "stats": {
+      "total": 2,
+      "pending_alarms": 0,
+      "test_messages": 2,
+      "mail_sent": 1
+    },
+    "devices": [
+      {
+        "address": 1,
+        "messages": 0,
+        "last_seen": null
+      }
+    ],
+    "mail": {
+      "provider": "qq",
+      "sender": "1743858164@qq.com",
+      "enabled": true,
+      "configured": true,
+      "recipient": "1743858164@qq.com"
+    },
+    "outbox": [
+      {
+        "id": 1,
+        "event_id": "test-initial-test-20260910-one-email",
+        "status": "sent",
+        "attempts": 1,
+        "last_error": null,
+        "sent_at": "2026-09-10T13:45:48+00:00",
+        "created_at": "2026-09-10T13:45:41+00:00"
+      }
+    ],
+    "server_time": "2026-09-10T13:57:18+00:00",
+    "version": "1.0.0"
+  },
+  "test_records": {
+    "items": [
+      {
+        "address": 1,
+        "alarm": false,
+        "boot": 0,
+        "boot_counter_valid": false,
+        "decode_valid": true,
+        "event_id": "test-initial-test-20260910-one-email",
+        "message_id": 1,
+        "received_at": null,
+        "schema": 1,
+        "t_ms": 60,
+        "text": "LIFI TEST OK",
+        "time_valid": false,
+        "truncated": false,
+        "uptime_ms": 0,
+        "id": 2,
+        "ingested_at": "2026-09-10T13:45:41+00:00",
+        "acknowledged_at": null,
+        "mail_status": "sent",
+        "mail_error": null,
+        "mail_sent_at": "2026-09-10T13:45:48+00:00",
+        "is_test": true
+      },
+      {
+        "address": 65535,
+        "alarm": false,
+        "boot": 1,
+        "boot_counter_valid": false,
+        "decode_valid": true,
+        "event_id": "deploy-api-check-20260910-1",
+        "message_id": 1,
+        "received_at": null,
+        "schema": 1,
+        "t_ms": 60,
+        "text": "API CHECK",
+        "time_valid": false,
+        "truncated": false,
+        "uptime_ms": 1000,
+        "id": 1,
+        "ingested_at": "2026-09-10T13:45:40+00:00",
+        "acknowledged_at": null,
+        "mail_status": null,
+        "mail_error": null,
+        "mail_sent_at": null,
+        "is_test": true
+      }
+    ],
+    "total": 2,
+    "page": 1,
+    "page_size": 25
+  },
+  "verified_at": "2026-09-10T13:57:11.164936+00:00"
+}

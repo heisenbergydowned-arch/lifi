@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5ef">
+  <title>光信站 · 光通信监测</title>
+  <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css?v=20260930-protocol">
+  <script src="/static/app.js?v=20260930-protocol" defer></script>
+</head>
+<body>
+<svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"/></symbol>
+  <symbol id="icon-message" viewBox="0 0 24 24"><path d="M6 4h12a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H8l-5 3V7a3 3 0 0 1 3-3Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-width="3"/></symbol>
+  <symbol id="icon-alert" viewBox="0 0 24 24"><path d="m10.3 3.8-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.2l-8-14a2 2 0 0 0-3.4 0Z"/><path d="M12 9v5m0 3h.01"/></symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24"><path d="m9.5 3-.6 2.2-2 .9L4.8 5.5l-2 3.4 1.6 1.6v2.4l-1.6 1.6 2 3.4 2.1-.6 2 .9.6 2.2h4.1l.6-2.2 2-.9 2.1.6 2-3.4-1.6-1.6v-2.4l1.6-1.6-2-3.4-2.1.6-2-.9-.6-2.2Z"/><circle cx="11.5" cy="11.7" r="3.2"/></symbol>
+  <symbol id="icon-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h3M7 17.5h3m7-11h.01m0 11h.01"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="1.5"/><path d="m3 5 9 7 9-7"/></symbol>
+  <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M20 12a8 8 0 1 0-2.5 6"/></symbol>
+  <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="icon-exit" viewBox="0 0 24 24"><path d="M9 4H4v16h5m6-13 5 5-5 5M8 12h12"/></symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M5 17h14l-2-3v-4a5 5 0 0 0-10 0v4l-2 3Zm5 3h4M12 3V2"/></symbol>
+</svg>
+
+<section id="login" class="login-page" aria-labelledby="login-title">
+  <div class="login-shell">
+    <div class="login-landscape" aria-hidden="true">
+      <div class="login-landscape-title"><span>光与消息</span><p>让微弱的光，也能被看见。</p></div>
+    </div>
+    <form id="login-form" class="login-form">
+      <p class="login-brand"><img src="/static/mark.svg" alt="" width="40" height="40">光信站</p>
+      <h1 id="login-title">欢迎回来</h1>
+      <p class="muted">登录查看接收消息、设备记录与求救告警。</p>
+      <label for="login-password">管理密码</label>
+      <input id="login-password" type="password" required maxlength="256" autocomplete="current-password" placeholder="输入管理密码">
+      <button class="primary wide" type="submit">登录光信站</button>
+      <p id="login-error" class="form-error" role="alert"></p>
+      <p class="login-caption">光通信监测</p>
+    </form>
+  </div>
+</section>
+
+<div id="workspace" class="workspace" hidden>
+  <aside class="sidebar" aria-label="站点导航">
+    <a class="brand" href="/" aria-label="光信站首页"><img src="/static/mark.svg" alt="" width="44" height="44"><span>光信站</span></a>
+    <nav aria-label="主要导航">
+      <button class="nav-item active" data-view="overview" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg><span>概览</span></button>
+      <button class="nav-item" data-view="messages"><svg class="icon" aria-hidden="true"><use href="#icon-message"/></svg><span>消息记录</span></button>
+      <button class="nav-item" data-view="alarms"><svg class="icon" aria-hidden="true"><use href="#icon-alert"/></svg><span>求救告警</span><b id="nav-alarm-count" hidden></b></button>
+      <button class="nav-item" data-view="settings"><svg class="icon" aria-hidden="true"><use href="#icon-settings"/></svg><span>系统设置</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <p>光通信监测<span></span></p>
+      <button id="logout" class="logout"><svg class="icon" aria-hidden="true"><use href="#icon-exit"/></svg>退出登录</button>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <h1 id="page-title">监测概览</h1>
+      <div class="top-actions">
+        <div id="connection" class="connection"><span class="status-dot"></span>正在同步</div>
+        <button id="refresh" class="quiet"><svg class="icon" aria-hidden="true"><use href="#icon-refresh"/></svg>刷新</button>
+        <button id="sound" class="quiet" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-bell"/></svg><span id="sound-label">声音提醒：关</span></button>
+      </div>
+    </header>
+    <div id="connection-error" class="notice error" role="alert" hidden>连接中断，当前显示上次同步的数据。正在重试。</div>
+    <div id="alarm-banner" class="alarm-banner" role="status" hidden>
+      <svg class="icon" aria-hidden="true"><use href="#icon-alert"/></svg>
+      <div><strong id="alarm-summary"></strong><p>收到 SOS / HELP，请核实接收端情况。</p></div>
+      <button id="show-alarms">查看告警</button>
+    </div>
+
+    <section id="overview-panel" aria-label="监测概况">
+      <div class="forest-banner">
+        <div class="hero-copy"><h2>光与消息</h2><p>接收消息 <span>·</span> 设备状态 <span>·</span> 求救提醒</p></div>
+        <p class="hero-note">让微弱的光<br>也能被看见<span></span></p>
+      </div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#icon-message"/></svg></div><div class="stat-copy"><span>累计消息</span><strong id="stat-total">—</strong><small>含系统测试</small></div></div>
+        <div class="stat-card"><div class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#icon-server"/></svg></div><div class="stat-copy"><span>接收端</span><strong id="stat-devices">—</strong><small>按地址编号区分</small></div></div>
+        <div class="stat-card alarm-stat"><div class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#icon-alert"/></svg></div><div class="stat-copy"><span>待处理告警</span><strong id="stat-alarms">—</strong><small>确认后保留记录</small></div></div>
+        <div class="stat-card"><div class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg></div><div class="stat-copy"><span>邮件通知</span><strong id="stat-mail">—</strong><small>发信服务已接受</small></div></div>
+      </div>
+    </section>
+
+    <div id="overview-layout" class="overview-active">
+      <section id="messages-panel" class="message-panel panel" aria-labelledby="feed-title">
+        <div class="message-heading"><div class="section-heading"><h2 id="feed-title">最近消息</h2><div class="message-meta"><span id="record-count" class="muted"></span><button id="view-messages" class="text-button">查看全部<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div></div>
+          <div class="filters">
+            <div class="filter-tabs" role="group" aria-label="消息类型">
+              <button class="selected" data-kind="all" aria-pressed="true">全部</button>
+              <button data-kind="normal" aria-pressed="false">普通</button>
+              <button data-kind="alarm" aria-pressed="false">求救</button>
+              <button data-kind="test" aria-pressed="false">测试</button>
+            </div>
+            <input id="search" class="search" type="search" placeholder="搜索消息内容…" maxlength="96" aria-label="搜索消息内容">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th scope="col">接收 / 上报时间</th><th scope="col">设备 / 编号</th><th scope="col">消息内容</th><th scope="col">状态</th><th scope="col">邮件通知</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead><tbody id="message-list"></tbody></table>
+          <div id="empty" class="empty" hidden><svg class="icon" aria-hidden="true"><use href="#icon-message"/></svg><h3>暂无消息</h3><p>接收端上报后将在这里显示。</p></div>
+        </div>
+        <div class="pagination"><span id="page-info">第 1 页</span><div><button id="prev" class="quiet">上一页</button><button id="next" class="quiet">下一页</button></div></div>
+      </section>
+
+      <aside id="overview-aside" aria-label="接收端与通知">
+        <section class="device-panel panel" aria-labelledby="device-title">
+          <div class="section-heading"><h2 id="device-title">接收端</h2></div>
+          <div id="devices"></div>
+          <p class="footnote">按最近上报记录展示，未使用独立心跳。</p>
+        </section>
+        <section class="notices-panel panel" aria-labelledby="notices-title">
+          <div class="section-heading"><h2 id="notices-title"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>通知记录</h2><button id="view-notices" class="text-button">查看全部<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+          <div id="recent-notices" class="recent-notices"><p class="muted">正在同步通知记录</p></div>
+        </section>
+        <p class="nature-caption">在自然中，连接更远的可能<span></span></p>
+      </aside>
+    </div>
+
+    <section id="settings-panel" hidden aria-label="通知设置">
+      <div class="settings-grid">
+        <div class="settings-secondary">
+        <section class="settings-card panel" aria-labelledby="protocol-title">
+          <h2 id="protocol-title">协议参数</h2>
+          <p class="muted">摩斯译码计时四元组，服务器 / 网关 / 接收端三端共用。</p>
+          <form id="protocol-form">
+            <label for="proto-t-ms">最小时间 T（ms）</label><input id="proto-t-ms" type="number" min="60" max="2000" step="1" required>
+            <small class="field-hint">允许范围 60 – 2000，默认 60。</small>
+            <label for="proto-dash-t">划点比（×T）</label><input id="proto-dash-t" type="number" min="2" max="5" step="1" required>
+            <small class="field-hint">允许范围 2 – 5，默认 3。</small>
+            <label for="proto-word-gap-t">字间间隔（×T）</label><input id="proto-word-gap-t" type="number" min="2" max="8" step="1" required>
+            <small class="field-hint">允许范围 2 – 8，默认 4。</small>
+            <label for="proto-msg-gap-t">消息间隔（×T）</label><input id="proto-msg-gap-t" type="number" min="4" max="20" step="1" required>
+            <small class="field-hint">允许范围 4 – 20，默认 10。</small>
+            <button type="submit" class="primary">保存协议参数</button>
+          </form>
+          <div class="recipient-box"><svg class="icon" aria-hidden="true"><use href="#icon-server"/></svg><div><span>服务器一致性令牌</span><strong id="protocol-token">—</strong></div></div>
+          <p class="footnote">保存后请同步写入网关（192.168.4.1 网页），并对照接收端 OLED 显示的令牌，三端一致才表示配置同步完成。</p>
+        </section>
+        <section class="settings-card panel" aria-labelledby="mail-title">
+          <h2 id="mail-title">邮件通知</h2>
+          <p class="muted">收到有效的 SOS / HELP 消息时发送邮件。</p>
+          <div class="recipient-box"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg><div><span>接收邮箱</span><strong id="recipient"></strong></div></div>
+          <form id="mail-form">
+            <label for="provider">发信服务</label><select id="provider"><option value="qq">QQ 邮箱 · SMTP</option><option value="resend">Resend · SMTP</option></select>
+            <label for="sender">发信邮箱</label><input id="sender" type="email" required autocomplete="off">
+            <label for="smtp-password">SMTP 授权码 / API Key</label><input id="smtp-password" type="password" maxlength="256" autocomplete="new-password" placeholder="输入授权码">
+            <small id="password-hint" class="field-hint">使用邮箱生成的授权码。</small>
+            <label class="check-row"><input id="mail-enabled" type="checkbox" checked>启用邮件通知</label>
+            <button type="submit" class="primary">保存设置</button>
+          </form>
+        </section>
+        </div>
+        <div class="settings-secondary">
+          <section class="settings-card panel" aria-labelledby="test-title">
+            <h2 id="test-title">测试通知</h2>
+            <p class="muted">创建一条 LIFI TEST OK 记录，并向接收邮箱发送测试邮件。</p>
+            <button id="send-test" class="quiet">发送测试邮件</button>
+            <p id="test-result" role="status" class="test-result"></p>
+            <p class="footnote">此操作只验证网站发信，光学接收需在硬件端验证。</p>
+          </section>
+          <section class="settings-card panel" aria-labelledby="history-title">
+            <div class="section-heading"><h2 id="history-title">最近通知</h2><span id="mail-config-status" class="pill"></span></div>
+            <div id="mail-history" class="mail-history"></div>
+            <p class="footnote">“服务已接受”表示发信服务器已接收，最终投递请查看收件箱及垃圾邮件。</p>
+          </section>
+        </div>
+      </div>
+    </section>
+    <footer><span>光信站 <span id="version">1.1.0</span></span><span id="sync-time">等待同步</span></footer>
+  </main>
+</div>
+<dialog id="detail" aria-labelledby="detail-title">
+  <div class="dialog-heading"><h2 id="detail-title">消息详情</h2><button id="close-detail" class="quiet" aria-label="关闭详情">关闭</button></div>
+  <div id="detail-body"></div><div id="detail-actions"></div>
+</dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

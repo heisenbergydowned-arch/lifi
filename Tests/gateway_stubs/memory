@@ -1,0 +1,19 @@
+#ifndef GATEWAY_STUB_MEMORY_H
+#define GATEWAY_STUB_MEMORY_H
+/* Host test shim only; production uses the toolchain's std::unique_ptr. */
+#include <stddef.h>
+void *operator new(size_t size);
+void operator delete(void *pointer) noexcept;
+void operator delete(void *pointer, size_t size) noexcept;
+namespace std {
+template <class T> class unique_ptr
+{
+    T *pointer = nullptr;
+public:
+    ~unique_ptr() { delete pointer; }
+    explicit operator bool() const { return pointer != nullptr; }
+    T *get() const { return pointer; }
+    void reset(T *value = nullptr) { delete pointer; pointer = value; }
+};
+}
+#endif

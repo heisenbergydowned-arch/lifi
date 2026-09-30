@@ -1,0 +1,33 @@
+# ── 构建产物 ──────────────────────────────────────────
+# Keil/EIDE 编译输出（约 116MB）
+MDK-ARM/Template/
+MDK-ARM/build/
+# PlatformIO 编译输出
+ESP8266_Gateway/.pio/
+
+# ── IDE / 编辑器本地配置 ─────────────────────────────
+.vscode/
+MDK-ARM/.eide/log
+*.uvguix.*
+
+# ── Python ───────────────────────────────────────────
+.venv/
+__pycache__/
+*.pyc
+*.sqlite3*
+
+# ── 敏感 / 本地数据（MonitorWebsite 内部另有一份） ──
+.private/
+mail.json
+config.local.json
+access.txt
+*.log
+# 含 WiFi 密码 / 设备 token / 服务器地址，严禁入库
+*.local.h
+*.local.*
+# 烧录了上述本地凭据的成品固件，严禁入库
+Firmware/
+
+# ── 系统杂项 ─────────────────────────────────────────
+Thumbs.db
+.DS_Store

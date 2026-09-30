@@ -1,0 +1,7 @@
+{
+  "smtp_accepted": true,
+  "recipient": "1743858164@qq.com",
+  "inbox_confirmed": true,
+  "check": "exact test message only",
+  "matching_count": 1
+}

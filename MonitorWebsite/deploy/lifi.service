@@ -1,0 +1,27 @@
+[Unit]
+Description=LiFi monitoring and email notifications
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=lifi
+Group=lifi
+WorkingDirectory=/opt/lifi/current
+Environment=LIFI_CONFIG=/etc/lifi/config.json
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/lifi/venv/bin/uvicorn server:create_app --factory --host 127.0.0.1 --port 8791 --workers 1 --no-access-log --no-proxy-headers
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=60
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/lifi
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=256M
+
+[Install]
+WantedBy=multi-user.target
